@@ -31,7 +31,7 @@ def electives():
 def ai():
     return render_template('ai.html')
 
-    @app.route('/ask')
+@app.route('/ask')
 def ask():
     return render_template('ask.html')
 
