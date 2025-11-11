@@ -1,5 +1,5 @@
 
-from flask import Flask, render_template
+from flask import Flask, render_template,request
 
 app = Flask(__name__)
 # 建立問答集 Store questions and answers in a simple list for demonstration purposes
