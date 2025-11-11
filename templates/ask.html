@@ -1,37 +1,64 @@
-import requests
-import json
 
-def Chatgpt_response(prompt):
-    # 你的 API Key
-    api_key = "YOUR_OPENAI_API_KEY"
-
-    # OpenAI API endpoint
-    open_ai_endpoint = "https://api.openai.com/v1/chat/completions"
-
-    # 定義 HTTP 標頭
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {api_key}"
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>中英問答</title>
+  <style>
+    body {
+      font-family: "Noto Sans TC", Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fafafa;
     }
-
-    # 定義請求內容
-    payload = {
-        "model": "gpt-4o-mini",  # 建議使用目前可用模型
-        "messages": [
-            {"role": "user", "content": prompt}
-        ],
-        "max_completion_tokens": 1000,
-        "top_p": 1.0,
-        "frequency_penalty": 0.0,
-        "presence_penalty": 0.0
+    h1 {
+      color: #333;
+      text-align: center;
     }
+    form {
+      text-align: center;
+      margin-top: 20px;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 10px;
+      font-size: 1rem;
+    }
+    button {
+      padding: 8px 14px;
+      font-size: 1rem;
+      margin-left: 5px;
+    }
+    .result {
+      margin-top: 30px;
+      text-align: center;
+      background: #f2f2f2;
+      padding: 15px;
+      border-radius: 6px;
+    }
+    .home-link {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>中英互譯問答</h1>
+  <form method="post" action="/ask">
+    <input type="text" name="question" placeholder="請輸入中文或英文單字" value="{{ question or '' }}" required />
+    <button type="submit">翻譯</button>
+  </form>
 
-    # 發送請求
-    response = requests.post(open_ai_endpoint, headers=headers, json=payload)
+  {% if question %}
+  <div class="result">
+    <strong>你輸入的單字：</strong> {{ question }}<br>
+    <strong>翻譯結果：</strong> {{ answer }}
+  </div>
+  {% endif %}
 
-    # 確認請求成功
-    if response.status_code == 200:
-        data = response.json()
-        return data["choices"][0]["message"]["content"]
-    else:
-        return f"Error {response.status_code}: {response.text}"
+  <a href="/" class="home-link">🏠 回首頁</a>
+</body>
+</html>
