@@ -1,20 +1,37 @@
-<!DOCTYPE html>
-<html lang="zh-Hant">
-<head>
-    <meta charset="UTF-8">
-    <title>問答系統</title>
-</head>
-<body>
-    <h1>問答系統</h1>
-    <form method="POST">
-        <label>請輸入問題：</label>
-        <input type="text" name="question" value="{{ question }}" required>
-        <button type="submit">送出</button>
-    </form>
+import requests
+import json
 
-    {% if answer %}
-        <h2>答案：</h2>
-        <p>{{ answer }}</p>
-    {% endif %}
-</body>
-</html>
+def Chatgpt_response(prompt):
+    # 你的 API Key
+    api_key = "YOUR_OPENAI_API_KEY"
+
+    # OpenAI API endpoint
+    open_ai_endpoint = "https://api.openai.com/v1/chat/completions"
+
+    # 定義 HTTP 標頭
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+
+    # 定義請求內容
+    payload = {
+        "model": "gpt-4o-mini",  # 建議使用目前可用模型
+        "messages": [
+            {"role": "user", "content": prompt}
+        ],
+        "max_completion_tokens": 1000,
+        "top_p": 1.0,
+        "frequency_penalty": 0.0,
+        "presence_penalty": 0.0
+    }
+
+    # 發送請求
+    response = requests.post(open_ai_endpoint, headers=headers, json=payload)
+
+    # 確認請求成功
+    if response.status_code == 200:
+        data = response.json()
+        return data["choices"][0]["message"]["content"]
+    else:
+        return f"Error {response.status_code}: {response.text}"
